@@ -1,0 +1,7 @@
+opensmile
+librosa
+torch
+resampy
+logzero
+pydub
+ruff
