@@ -12,9 +12,6 @@ import os
 
 
 def main(data_dir, no_extract_feature):
-    """
-    前処理と特徴量抽出
-    """
     raw_dir = os.path.join(data_dir, "raw")
     preprocessed_dir = os.path.join(data_dir, "preprocessed")
     feature_dir = os.path.join(data_dir, "feature")
@@ -55,19 +52,16 @@ def main(data_dir, no_extract_feature):
             raise ValueError("voice data_id and transcript data_id are not equal.")
 
         data_id = voice_data_id
-        # 被験者の話している区間を取得
         participant_segments = get_participant_segments(
             transcript_file_path, int(data_id)
         )
         voice_output_file_path = os.path.join(preprocessed_dir, f"{data_id}_AUDIO.wav")
-        # 被験者の話している区間のみの音声を保存
         get_participant_voice(
             voice_file_path,
             participant_segments,
             voice_output_file_path,
         )
         if not no_extract_feature:
-            # 被験者音声から特徴量を抽出
             extract_opensmile_lld_feature(
                 voice_output_file_path,
                 os.path.join(feature_dir, "opensmile"),

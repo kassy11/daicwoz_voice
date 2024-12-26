@@ -4,7 +4,7 @@ import os
 from logzero import logger
 from utils import save_feature
 
-# VGGishのPyTorch実装
+# VGGish PyTorch model
 # See: https://github.com/harritaylor/torchvggish
 model = torch.hub.load("harritaylor/torchvggish", "vggish")
 model.eval()
@@ -12,7 +12,7 @@ model.eval()
 
 def extract_vggish_feature(voice_file_path, output_data_dir, data_id):
     """
-    音声からVGGishの特徴量を抽出する
+    Extract VGGish feature from voice file
     """
     logger.info(f"Extracting VGGish feature from {voice_file_path}....")
     os.makedirs(output_data_dir, exist_ok=True)

@@ -1,22 +1,22 @@
 # daicwoz_voice
 
-DAIC-WOZ で提供されている生音声データの前処理と特徴量抽出
+Preprocessing and feature extraction for raw voice data of DAIC-WOZ
 
-## 実行手順
+## How to use
 
-1. `download.sh`を実行して、DAIC-WOZデータをダウンロードする
-2. `python voice.py`を実行して、生音声の前処理と特徴量抽出を行う
-3. `python daicwoz_label.py`を実行して、ラベルを作成する
+1. Run `download.sh` to download the DAIC-WOZ data
+2. Run `python main.py` to preprocess the raw voice and extract features
+3. Run `python daicwoz_label.py` to create labels
 
-## 生音声の前処理と特徴量抽出 (`voice.py`)
+## Voice processing (`main.py`)
 
-音声書き起こしファイルに記載されている秒数をもとに、被験者の音声区間を特定しそれ以外の区間を無音にした音声を作成します。
+Based on the number of seconds listed in the audio transcript file, the participant's voice sections are identified and other sections are silenced to create audio.
 
-音声書き起こしファイルの秒数がズレているデータがあるため、[adbailey1/daic_woz_process](https://github.com/adbailey1/daic_woz_process)を参考に秒数を補正しています。
+Because the number of seconds in the audio transcript file is out of sync, correcting the number of seconds by referring to [adbailey1/daic_woz_process](https://github.com/adbailey1/daic_woz_process).
 
-その後、この前処理を行った音声からOpenSMILEの1秒ごとの特徴量とVGGishの特徴量を抽出します。VGGishはPyTorchでの実装である[harritaylor/torchvggish](https://github.com/harritaylor/torchvggish)を利用しています。
+After this, OpenSMILE features per second and VGGish features are extracted from the preprocessed audio. For VGGish, using [harritaylor/torchvggish](https://github.com/harritaylor/torchvggish), a PyTorch implementation.
 
 
-## ラベルの作成 (`daicwoz_label.py`)
+## Label processing (`daicwoz_label.py`)
 
-DAIC-WOZで提供されているラベルに関する各CSVを結合し、モデル学習のために必要なラベルを作成します。
+Combine each CSV of labels provided by DAIC-WOZ to create the labels for model training.

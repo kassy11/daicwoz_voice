@@ -9,11 +9,11 @@ def main(train_csv_path, dev_csv_path, test_csv_path, output_csv_path):
     train_df = pd.read_csv(train_csv_path)
     dev_df = pd.read_csv(dev_csv_path)
     test_df = pd.read_csv(test_csv_path)
-    # 必要な列のみ抽出
+
     train_df = train_df[["Participant_ID", "PHQ8_Score"]]
     dev_df = dev_df[["Participant_ID", "PHQ8_Score"]]
     test_df = test_df[["Participant_ID", "PHQ_Score"]]
-    # 列名を統一する
+
     train_df.columns = ["index", "label"]
     dev_df.columns = ["index", "label"]
     test_df.columns = ["index", "label"]
@@ -27,11 +27,11 @@ def main(train_csv_path, dev_csv_path, test_csv_path, output_csv_path):
     test_df["label"] = test_df["label"].apply(
         lambda x: 1 if x >= PHQ8_CUTOFF_POINT else 0
     )
-    # fold列を追加
+
     train_df["fold"] = "train"
     dev_df["fold"] = "valid"
     test_df["fold"] = "test"
-    # 結合して保存
+
     result_df = pd.concat([train_df, dev_df, test_df])
     result_df.to_csv(output_csv_path, index=False)
     logger.info(f"Saved to {output_csv_path}")

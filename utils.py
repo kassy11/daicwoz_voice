@@ -16,7 +16,7 @@ def get_participant_voice(
     output_file_path,
 ):
     """
-    被験者のみの音声を抽出する
+    Extract participant voice from audio file
     """
     logger.info(f"Extracting participant voice from {audio_file_path}....")
     audio = AudioSegment.from_file(audio_file_path)
@@ -34,16 +34,14 @@ def get_participant_voice(
 
 def get_participant_segments(transcript_csv_file_path, data_id: int):
     """
-    音声書き起こしファイルから参加者の話している区間を取得する
+    Get participant segments from transcript file
     """
     try:
-        # ファイル読み込み
         transcript_df = pd.read_csv(transcript_csv_file_path, delimiter="\t")
     except Exception as e:
         logger.error(f"Error reading transcript file: {e}")
         raise
 
-    # フィルタリング
     if "speaker" not in transcript_df.columns:
         logger.error("'speaker' column not found in daicwoz transcript.")
         raise ValueError("'speaker' column missing in transcript.")
@@ -57,7 +55,7 @@ def get_participant_segments(transcript_csv_file_path, data_id: int):
             raise ValueError(f"Column '{col}' missing in transcript.")
 
     if data_id in daicwoz_misaligned.keys():
-        # 時間補正処理
+        # Misaligned data
         logger.info(f"Misalignment found in {data_id}. Correcting time...")
         correction_time = daicwoz_misaligned[data_id]
         participant_segments_df.loc[:, "start_time"] += correction_time
@@ -67,7 +65,7 @@ def get_participant_segments(transcript_csv_file_path, data_id: int):
 
 def get_voice_files(input_data_dir):
     """
-    音声ファイルを取得する
+    Get voice files from input data directory
     """
     pattern = os.path.join(input_data_dir, "*", "*_AUDIO.wav")
     file_paths = glob.glob(pattern, recursive=True)
@@ -84,7 +82,7 @@ def get_voice_files(input_data_dir):
 
 def get_transcript_files(input_data_dir):
     """
-    音声書き起こしファイルを取得する
+    Get  transcript files from input data directory
     """
     patterns = [
         os.path.join(input_data_dir, "*", "*_TRANSCRIPT.csv"),
@@ -105,7 +103,7 @@ def get_transcript_files(input_data_dir):
 
 def _save_as_npy(csv_file_path, output_dir):
     """
-    CSVファイルを.npyファイル（numpy形式）に変換する
+    Convert csv file to npy file
     """
     os.makedirs(output_dir, exist_ok=True)
     data = np.loadtxt(csv_file_path, delimiter=",", skiprows=1)
@@ -115,7 +113,7 @@ def _save_as_npy(csv_file_path, output_dir):
 
 def save_feature(feature: pd.DataFrame, output_dir, output_file_name):
     """
-    特徴量を保存する
+    Save feature to csv and npy file
     """
     os.makedirs(output_dir, exist_ok=True)
     csv_file_path = os.path.join(output_dir, output_file_name)

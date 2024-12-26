@@ -7,15 +7,14 @@ from utils import save_feature
 
 smile = opensmile.Smile(
     feature_set=opensmile.FeatureSet.eGeMAPSv02,
-    feature_level=opensmile.FeatureLevel.LowLevelDescriptors,  # LLDを計算する
+    feature_level=opensmile.FeatureLevel.LowLevelDescriptors,
 )
 
 
 def _get_lld_per_sec(voice_file_path):
     """
-    D-Vlogの元論文に記載されている方法でLLDを抽出する
-    1秒毎にLLDsを抽出・平均化し、全てのLLDsを連結したものを特徴量とする
-    frameStep, frameSizeの合わせ方は不明なので無視する
+    Extract LLDs using the method described in the original D-Vlog paper.
+    Extract and average LLDs every second, and concatenate all LLDs to create features.
     """
     y, sr = librosa.load(voice_file_path, sr=None)
     duration = int(librosa.get_duration(y=y, sr=sr))
@@ -40,7 +39,7 @@ def _get_lld_per_sec(voice_file_path):
 
 def extract_opensmile_lld_feature(voice_file_path, output_data_dir, data_id):
     """
-    音声からopenSMILEのLLD特徴量を抽出する
+    Extract openSMILE LLD feature per sec from voice file
     """
     logger.info(f"Extracting openSMILE LLD feature per sec from {voice_file_path}....")
     os.makedirs(output_data_dir, exist_ok=True)
